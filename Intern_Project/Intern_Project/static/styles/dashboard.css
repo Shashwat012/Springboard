@@ -259,6 +259,7 @@ body.dark-mode button.delete:hover {
   font-weight: 300;
   padding: 15px;
   border-radius: 20px;
+  margin-bottom: 50px;
   flex: 1;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
@@ -598,6 +599,7 @@ body.dark-mode .budget-list {
   color: #45a049;
 }
 
+/* Team 4 */
 .container {
   max-width: 1200px;
   text-align: center;

@@ -79,8 +79,8 @@
           <!-- Data dynamically added here -->
         </tbody>
       </table>
+      
     </section>
-
     <!-- ADD EXPENSE FORM -->
     <section class="add-expense">
       <h2>Add Expense</h2>
@@ -209,6 +209,10 @@
     </table>
   </section>
 
+
+
+
+  <!-- Team 4 -->
   <div class="container">
     <h1>My Expenses</h1>
     
@@ -354,8 +358,20 @@
             console.error("Error updating charts:", error);
         }
     }
-    
-    
+    function loadExpenses(page) {
+  fetch(`/dashboard?expense_page=${page}`)
+    .then(response => response.text())
+    .then(data => {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(data, 'text/html');
+      const newTableBody = doc.getElementById('expense-table-body').innerHTML;
+      document.getElementById('expense-table-body').innerHTML = newTableBody;
+
+      const newPagination = doc.querySelector('.pagination').innerHTML;
+      document.querySelector('.pagination').innerHTML = newPagination;
+    })
+    .catch(error => console.error('Error loading expenses:', error));
+}
 </script>
 </body>
 </html>
