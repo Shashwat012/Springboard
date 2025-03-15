@@ -305,73 +305,58 @@
             .catch(error => console.error("Error updating chart:", error));
     }
     
-    async function updateLineChart() {
-        const year = document.getElementById("pieYear").value;  // Get selected year
-    
-        try {
-            const response = await fetch(`/plot/line_chart/${year}`);
-            const data = await response.json();
-            document.getElementById("lineChart").src = "data:image/png;base64," + data.line_chart;
-        } catch (error) {
-            console.error("Error updating line chart:", error);
-        }
+    async function updateLineChart(user, year) {
+    try {
+        const response = await fetch(`/plot/line_chart/${year}?user=${encodeURIComponent(user)}`);
+        const data = await response.json();
+        document.getElementById("lineChart").src = "data:image/png;base64," + data.line_chart;
+    } catch (error) {
+        console.error("Error updating line chart:", error);
     }
+}
     
     document.addEventListener("DOMContentLoaded", function () {
         updateCharts();  // Load default charts when page loads
     });
 
     async function updateCharts() {
-        const user = document.getElementById("pieUser").value;
-        const year = document.getElementById("pieYear").value;
-        const month = document.getElementById("pieMonth").value;
-    
-        try {
-            let noData = false;
-    
-            // Update Pie Chart
-            const pieResponse = await fetch(`/plot/pie_chart/${year}/${month}?user=${encodeURIComponent(user)}`);
-            const pieData = await pieResponse.json();
-            if (pieData.no_data) noData = true;
-            else document.getElementById("pieChart").src = "data:image/png;base64," + pieData.pie_chart;
-    
-            // Update Bar Chart
-            const barResponse = await fetch(`/plot/bar_chart/${year}/${month}?user=${encodeURIComponent(user)}`);
-            const barData = await barResponse.json();
-            if (barData.no_data) noData = true;
-            else document.getElementById("barChart").src = "data:image/png;base64," + barData.bar_chart;
-    
-            // Update Stacked Bar Chart
-            const stackedResponse = await fetch(`/plot/stacked_bar_chart/${year}/${month}`);
-            const stackedData = await stackedResponse.json();
-            if (stackedData.no_data) noData = true;
-            else document.getElementById("stackedBarChart").src = "data:image/png;base64," + stackedData.stacked_bar_chart;
-    
-            // Update Line Chart
-            await updateLineChart();  // Add this function call
-    
-            if (noData) {
-                alert("Insufficient data available for the selected month and year.");
-            }
-    
-        } catch (error) {
-            console.error("Error updating charts:", error);
-        }
-    }
-    function loadExpenses(page) {
-  fetch(`/dashboard?expense_page=${page}`)
-    .then(response => response.text())
-    .then(data => {
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(data, 'text/html');
-      const newTableBody = doc.getElementById('expense-table-body').innerHTML;
-      document.getElementById('expense-table-body').innerHTML = newTableBody;
+    const user = document.getElementById("pieUser").value;
+    const year = document.getElementById("pieYear").value;
+    const month = document.getElementById("pieMonth").value;
 
-      const newPagination = doc.querySelector('.pagination').innerHTML;
-      document.querySelector('.pagination').innerHTML = newPagination;
-    })
-    .catch(error => console.error('Error loading expenses:', error));
+    try {
+        let noData = false;
+
+        // Update Pie Chart
+        const pieResponse = await fetch(`/plot/pie_chart/${year}/${month}?user=${encodeURIComponent(user)}`);
+        const pieData = await pieResponse.json();
+        if (pieData.no_data) noData = true;
+        else document.getElementById("pieChart").src = "data:image/png;base64," + pieData.pie_chart;
+
+        // Update Bar Chart
+        const barResponse = await fetch(`/plot/bar_chart/${year}/${month}?user=${encodeURIComponent(user)}`);
+        const barData = await barResponse.json();
+        if (barData.no_data) noData = true;
+        else document.getElementById("barChart").src = "data:image/png;base64," + barData.bar_chart;
+
+        // Update Stacked Bar Chart
+        const stackedResponse = await fetch(`/plot/stacked_bar_chart/${year}/${month}`);
+        const stackedData = await stackedResponse.json();
+        if (stackedData.no_data) noData = true;
+        else document.getElementById("stackedBarChart").src = "data:image/png;base64," + stackedData.stacked_bar_chart;
+
+        // Update Line Chart with the selected year and user
+        await updateLineChart(user, year);  // Pass user and year to updateLineChart
+
+        if (noData) {
+            alert("Insufficient data available for the selected month and year.");
+        }
+
+    } catch (error) {
+        console.error("Error updating charts:", error);
+    }
 }
+   
 </script>
 </body>
 </html>
