@@ -1,0 +1,590 @@
+/* GLOBAL STYLES */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #d9f0fe; /* Light background */
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out; /* Smooth transition */
+}
+
+/* Dark Mode Styles */
+body.dark-mode {
+    background-color: #121212;
+    color: #ffffff;
+}
+
+/* HEADER */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #38647a; /* Blue Grey 500 */
+    color: #fff;
+    padding: 25px;
+    transition: background-color 0.3s ease-in-out; /* Smooth transition */
+}
+
+header.dark-mode {
+    background: #38647a;
+}
+
+header h1 {
+    margin: 0;
+    flex: 1;
+    text-align: left;
+    font-size: 1.5em; /* Make the text smaller */
+}
+
+h1 {
+    text-align: center;
+    margin: 20px 0;
+}
+
+/* TABLE HEADER */
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+/* CONTROLS */
+.controls {
+    display: flex;
+    justify-content: flex-end;
+    margin: 10px 20px;
+    gap: 10px;
+}
+
+.controls button {
+    padding: 10px 15px;
+    background: #2196F3;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: 0.2s ease-in-out;
+}
+
+.controls button:hover {
+    background: #1976D2;
+}
+
+/* NAVIGATION */
+nav {
+    display: flex;
+    gap: 15px;
+    flex: 2;
+    justify-content: center;
+}
+
+nav button {
+    padding: 10px 15px;
+    background: #CFD8DC;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.2s ease-in-out;
+}
+
+nav button.dark-mode {
+    background: #6c95a8;
+    color: #ffffff;
+}
+
+nav button.dark-mode:hover {
+    background: #7b7a7a;
+}
+
+nav button:hover {
+    background: #B0BEC5;
+    transform: scale(1.05);
+}
+
+nav span {
+    align-self: center;
+    font-weight: bold;
+}
+
+/* Loading Message */
+#loading-message {
+    text-align: center;
+    margin: 5px auto;
+    font-size: 15px;
+    color: #000000;
+    transition: opacity 0.5s ease-in-out; /* Add transition for smooth fade-out */
+    height: 20px; /* Set a fixed height to prevent content shifting */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.fade-out {
+    opacity: 0;
+}
+
+/* Message Container */
+#message-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 10px; /* Adjust height as needed */
+    margin: 10px 0; /* Add some margin for spacing */
+}
+
+#message {
+    font-size: 18px;
+    color: #353535;
+}
+
+.dark-mode #message {
+    font-size: 18px;
+    color: #eeebeb;
+}
+
+/* MAIN CONTENT: Expense List & Add Expense Side by Side */
+.main-content {
+    display: flex;
+    gap: 10px;
+    margin: 20px;
+}
+
+/* TABLE CONTAINER */
+.table-container {
+    flex: 2;
+}
+
+/* TABLE STYLING */
+table {
+    width: 100%;
+    border-spacing: 0;
+    border-radius: 12px; /* Makes the corners rounded */
+    overflow: hidden; 
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2); /* Adds a soft shadow */
+    margin-top: 10px;
+}
+
+
+table.dark-mode th {
+    background: #204a5e;
+    color: #ffffff;
+}
+
+table.dark-mode td {
+    background: #525d62;
+    color: #ffffff;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: center;
+}
+
+th {
+    background: #a1d4ea;
+}
+
+tr:hover {
+    background: #e9f8ff;
+}
+
+/* TABLE LIST */
+.table-list {
+    background: #FAFAFA;
+    color: #333;
+    padding: 20px;
+    border-radius: 10px;
+    flex: 3; /* Wider than the form */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out; /* Smooth transition */
+}
+
+.table-list.dark-mode {
+    background: #28383f;
+    color: #ffffff;
+}
+
+.table-list h2 {
+    text-align: center;
+    margin-top: 0;
+}
+
+/* EDIT/DELETE BUTTONS */
+button.edit,
+button.delete,
+button.update {
+    padding: 5px 8px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    color: #fff;
+    transition: 0.2s ease-in-out;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+button.edit { background: #FAFAFA; }
+button.edit:hover {
+    background: #38e141;
+    transform: scale(1.05);
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+button.delete { background: #FAFAFA; }
+button.delete:hover {
+    background: #fdc11e;
+    transform: scale(1.05);
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+button.update {
+    background: #2196F3;
+    padding: 5px 10px; /* Adjust padding to fit text */
+}
+
+button.update:hover {
+    background: #1976D2;
+    transform: scale(1.05);
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+button.edit i,
+button.delete i {
+    margin: 0; /* Remove margin to center the icon */
+}
+
+/* FORM POPUP */
+.form-popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #FAFAFA;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    width: 350px; /* Increase the width */
+}
+
+.form-popup.dark-mode {
+    background: #1e3541;
+    color: #cecece;
+}
+
+.form-popup .form-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-popup .form-container input,
+.form-popup .form-container button {
+    margin-bottom: 10px;
+}
+
+/* CLOSE BUTTON */
+.form-popup .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    cursor: pointer;
+    background: #c10d00;
+    border: none;
+    color: #fff;
+    border-radius: 5px;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.1s ease-in-out;
+}
+
+.form-popup .close-btn.dark-mode {
+    background: #444444;
+}
+
+.form-popup .close-btn.dark-mode:hover {
+    background: #990101;
+}
+
+.form-popup .close-btn:hover {
+    background: #fd0602;
+}
+
+/* BACKDROP */
+.backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    display: none;
+}
+
+/* FORM FIELDS */
+form {
+    margin-top: 5px;
+}
+
+form label {
+    display: block;
+    margin: 5px 0;
+    transition: font-weight 0.2s ease-in-out; /* Smooth transition for font weight */
+}
+
+form input,
+form select,
+form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    box-sizing: border-box;
+    border: 1px solid #bab7b7;
+    border-radius: 4px;
+    outline: none; /* Remove default focus outline */
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out; /* Smooth transition */
+}
+
+form input:hover,
+form select:hover,
+form textarea:hover {
+    box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.2); /* Apply box-shadow on hover */
+}
+
+/* FOR SUBMIT BUTTON */
+form button {
+    width: 100%;
+    padding: 10px;
+    background: #343333;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.2s ease-in-out;
+    outline: none; /* Remove default focus outline */
+}
+
+form button.dark-mode {
+    background: #444444;
+}
+
+form button.dark-mode:hover {
+    background: #04593e;
+}
+
+form button:hover {
+    background: #06875e;
+    box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.2); /* Apply box-shadow on hover */
+}
+
+/* OPTIONAL: Show Form Animation if needed */
+.show-form {
+    display: block !important;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Bar Graph Section */
+.graph-section {
+    background: #CFE9F0;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.bar-graph {
+    width: 100%; /* Take full width of parent */
+    max-width: 100%; /* Prevent overflowing */
+    overflow: hidden; /* Hide anything that overflows */
+    height: 400px; /* You can adjust height as needed */
+    margin: auto; /* Center align if needed */
+}
+#chart {
+    width: 100%; /* Make chart responsive */
+    height: 100%; /* Fit height of container */
+}
+
+/* Small Graphs Section */
+.small-graphs {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+}
+
+.small-graph {
+    background: #CFE9F0;
+    flex: 1;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.pie-chart img {
+    max-width: 100%; /* Prevent overflow */
+    height: auto; /* Maintain aspect ratio */
+    display: block; /* Remove extra spacing */
+    margin: 0 auto; /* Center it */
+    width: 400px; /* Optional fixed width if you want consistent size */
+}
+.img-fluid {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Pagination Buttons */
+#pagination {
+    position: relative; /* Relative to the table container */
+    text-align: center; /* Center the buttons */
+    margin-top: 20px; /* Add spacing between the table and buttons */
+    padding: 10px 0; /* Add padding for better spacing */
+    background: #f9f9f9; /* Optional: Add a background to separate it visually */
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
+    border-radius: 8px; /* Add rounded corners */
+}
+
+#pagination button {
+    padding: 10px 15px;
+    background: #2196F3; /* Primary color */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s ease-in-out;
+    margin: 0 5px; /* Add spacing between buttons */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#pagination button:hover {
+    background: #1976D2; /* Darker shade on hover */
+    transform: scale(1.1); /* Slight zoom effect */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow */
+}
+
+#pagination button:disabled {
+    background: #B0BEC5; /* Disabled button color */
+    cursor: not-allowed;
+    transform: none; /* Remove hover effects */
+    box-shadow: none;
+}
+
+#pagination span {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    margin: 0 10px;
+}
+
+/* Dark Mode Styles for Pagination */
+body.dark-mode #pagination {
+    background: #28383f;
+}
+
+body.dark-mode #pagination button {
+    background: #6c95a8;
+    color: #ffffff;
+}
+
+body.dark-mode #pagination button:hover {
+    background: #7b7a7a;
+}
+
+body.dark-mode #pagination span {
+    color: #ffffff;
+}
+.filter-container {
+    display: flex;
+    justify-content: flex-end; /* Aligns selection to right */
+    padding: 20px;
+    gap: 10px; /* Space between dropdowns */
+}
+
+select {
+    padding: 8px 12px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: white;
+    cursor: pointer;
+}
+
+select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+.filter-dropdown {
+    display: none;
+    position: absolute;
+    background: white;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    top: 100%; /* Moves it below the icon */
+    left: auto; /* Reset left positioning */
+    right: 0; /* Align the right edge of the dropdown with the left edge of the button */
+    transform: translateX(-100%); /* Shift the dropdown fully to the left */
+    z-index: 10;
+    width: max-content; /* Ensures dropdown width adjusts to content */
+}
+
+
+.filter-dropdown select,
+.filter-dropdown button {
+    display: block;
+    width: 100%;
+    margin: 5px 0;
+}
+
+.filter-dropdown button {
+    background-color: blue;
+    color: white;
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .small-graphs {
+        flex-direction: column;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+}
+
+/* Mobile Optimization */
+@media screen and (max-width: 768px) {
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    nav {
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .main-content {
+        flex-direction: column;
+    }
+}

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Family Finance Tracker{% endblock %}</title>
+    {% block styles %}{% endblock %}
+</head>
+<body>
+
+    <header>
+        <h1 class="small-header">UNIFIED FAMILY FINANCE TRACKER</h1>
+        <nav>
+            <a href="{{ url_for('super_user_dashboard') }}"><button id="insights-btn" class="hover-effect">Superuser Dashboard</button></a> 
+            <a href=""><button id="expense-btn" class="hover-effect">Expense & Budget Management</button></a>
+            <a href="{{ url_for('saving_page') }}"><button id="budget-btn" class="hover-effect"> Savings Management</button></a>   
+            <button id="dark-mode-toggle">🌙</button>
+            <a href="{{ url_for('logout') }}" class="logout-btn" style="text-decoration: none;">LOGOUT</a>
+        </nav>
+    </header>
+
+         <!-- Welcome Card -->
+         <div class="welcome-card">
+            <div class="welcome-text">
+                <span id="user-greeting">Hello, {{username or 'Guest' }}</span>
+                
+                <!-- RANDOM MESSAGES -->
+                <div id="message-container">
+                    <div id="message"></div>
+                </div>  
+            </div>
+            <div class="welcome-images">
+                <!-- Replace with your image URLs -->
+                <img src="https://i.pinimg.com/736x/8e/90/80/8e9080b568929a595e9396ba8b23b04a.jpg" alt="Person analyzing data" class="welcome-image">
+                <img src="https://i.pinimg.com/736x/8e/90/80/8e9080b568929a595e9396ba8b23b04a.jpg" alt="Person analyzing data" class="welcome-image">
+                <img src="https://i.pinimg.com/736x/c1/85/a1/c185a134c6e32e2135afcb39d5b33b59.jpg" alt="Person with finances" class="welcome-image">
+            </div>
+        </div>
+
+    {% block content %}{% endblock %}
+
+    {% block graphs %}
+    <div id="graph-section">
+        <h2>Graphs</h2>
+        <!-- Graph content goes here -->
+    </div>
+    {% endblock %}
+
+    <footer class="footer-gradient">
+        <div class="footer-content">
+            <!-- <div class="footer-section about">
+                <h3>About Family Finance Tracker</h3>
+                <p>A comprehensive solution for managing family finances, budgets, and expenses with advanced tracking and visualization tools.</p>
+                <div class="contact">
+                    <p><span>📞</span> +1 234 567 8900</p>
+                    <p><span>✉️</span> support@familyfinance.com</p>
+                    <p><span>🏢</span> 123 Finance Street, Money City, MC 12345</p>
+                </div>
+            </div> -->
+            <!-- <div class="footer-section links">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#">Features</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Help Center</a></li>
+                </ul>
+            </div> -->
+            <!-- <div class="footer-section social">
+                <h3>Stay Connected</h3>
+                <div class="socials">
+                    <a href="#"><span>📱</span> Facebook</a>
+                    <a href="#"><span>📱</span> Twitter</a>
+                    <a href="#"><span>📱</span> LinkedIn</a>
+                    <a href="#"><span>📱</span> Instagram</a>
+                </div>
+            </div> -->
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Unified Family Finance Tracker. All rights reserved.</p>
+        </div>
+    </footer>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>
