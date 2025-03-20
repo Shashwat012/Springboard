@@ -1,4 +1,4 @@
-const savingsCategories = ["Education", "Health", "Travel", "Food", "Entertainment", "Others"];
+const savingsCategories = ["Education Fund", "Vacation Fund", "Emergency Fund", "Home Improvement","Retirement Fund","Others","Education","Travel","Health"];
 const messages = [
     "💸 Counting your regrets… I mean, transactions… 💸",
     "🏦 Asking your bank if it’s okay to proceed… 📞",
@@ -50,6 +50,7 @@ document.getElementById("savingTargetForm").addEventListener("submit", function(
             closeForm('savingTargetForm');
             showMessage(response.message);
         });
+    console.log(savingsData);
 });
 
 document.getElementById("savingsForm").addEventListener("submit", function(e) {
@@ -68,6 +69,7 @@ document.getElementById("savingsForm").addEventListener("submit", function(e) {
             closeForm('savingsForm');
             showMessage(response.message);
         });
+    console.log(savingsData);
 });
 
 let currentPage = 1;
@@ -86,6 +88,7 @@ function loadData() {
             savingsData = data; // Store the data globally
             displayTableData(); // Display the first page
         });
+    console.log(savingsData);
 }
 function loadFiltersfortables() {      // Loads filters for the table
     fetch('/get_filters_for_table')
@@ -112,6 +115,7 @@ function loadFiltersfortables() {      // Loads filters for the table
             });
         })
         .catch(error => console.error("Failed to load filters:", error));
+        console.log(savingsData);
 }
 function updateTables() {    // Updates the table data based on the selected filters
     const selectedMonth = document.getElementById("tableMonthFilter").value;
@@ -129,6 +133,7 @@ function updateTables() {    // Updates the table data based on the selected fil
             displayTableData();
         })
         .catch(error => console.error("Failed to load filtered table data:", error));
+    console.log(savingsData);
 }
 function toggleFilter() {
     const filterOptions = document.getElementById("filterOptions");
@@ -148,13 +153,15 @@ function toggleFilter() {
 }
           
 function displayTableData() {
+    console.log("User Privilege in JS:", userPrivilege);  // Debug log
+    
     const tbody = document.getElementById("savingsTable").querySelector("tbody");
     tbody.innerHTML = "";
 
     const startIndex = (currentPage - 1) * rowsPerPage;
     const endIndex = startIndex + rowsPerPage;
     const pageData = savingsData.slice(startIndex, endIndex);
-
+    console.log(pageData)
     pageData.forEach(item => {
         let remainingAmount;
         if (item.savings_amount_saved >= item.savings_target_amount) {
@@ -172,13 +179,17 @@ function displayTableData() {
             <td>${item.savings_amount_saved || ''}</td>
             <td>${remainingAmount}</td>
             <td>${item.savings_payment_mode || ''}</td>
-            <td>
-                <button class="edit" onclick="editTarget(${item.savings_target_id})">✏️</button>
-                <button class="delete" onclick="deleteTarget(${item.savings_target_id})">❌</button>
-            </td>
-            <td>
-                <button class="update" onclick="updateSavings(${item.savings_target_id})">Update</button>
-            </td>
+            
+            ${userPrivilege === 'edit' ? `
+                <td>
+                    <button class="edit" onclick="editTarget(${item.savings_target_id})">✏️</button>
+                    <button class="delete" onclick="deleteTarget(${item.savings_target_id})">❌</button>
+                </td>
+                <td>
+                    <button class="update" onclick="updateSavings(${item.savings_target_id})">Update</button>
+                </td>
+                ` : ''}            
+            
         `;
         tbody.appendChild(row);
     });
@@ -223,6 +234,7 @@ function editTarget(id) {
             document.getElementById("savingTargetForm").dataset.id = id;
             showForm('savingTargetForm');
         });
+    console.log(savingsData);
 }
 
 function deleteTarget(id) {
@@ -234,12 +246,14 @@ function deleteTarget(id) {
                 showMessage(response.message);
             });
     }
+    console.log(savingsData);
 }
 
 function deleteSavings(id) {
     fetch(`/delete_savings/${id}`, { method: "DELETE" })
         .then(response => response.json())
         .then(() => loadData());
+        console.log(savingsData);
 }
 
 function updateSavings(id) {
@@ -259,6 +273,7 @@ function updateSavings(id) {
             }
             showForm('savingsForm');
         });
+        console.log(savingsData);
 }
 
 function showForm(formId) {

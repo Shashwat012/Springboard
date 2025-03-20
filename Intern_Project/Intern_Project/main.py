@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify, send_file
+from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify, send_file,Response
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import Session
 from sqlalchemy import func, and_, or_
@@ -16,7 +16,6 @@ from graph import *
 import base64
 import pandas as pd
 import plotly.graph_objects as go 
-
 
 app = Flask(__name__)
 app.secret_key = "unifiedfamilyfinancetracker"
@@ -278,6 +277,7 @@ def verify():
 
         flash("Invalid OTP, Please Try Again!")
 
+    print(f"Stored OTP: {session.get('otp')}")
     return render_template('verification.html')
 
 
@@ -474,9 +474,7 @@ def view_dash():
     stacked_bar_chart = generate_stacked_bar_chart(user_id=user.id, month=current_month, year=current_year)
     line_chart = generate_line_chart(year=current_year, user_id=user.id)
     return render_template("dashboard_view.html",
-                            username=user.username,
-                            users=all_users,
-                            default_user=default_user,  
+                            username=user.username, 
                             monthly_plot=monthly_plot, 
                             category_plot=category_plot, 
                             pie_chart=pie_chart, 
@@ -988,9 +986,12 @@ def get_line_chart(year):
 #Team 3
 @app.route('/saving_page')
 def saving_page():
+    user_id = session.get('user_id')
+    user = User.query.get(user_id) if user_id else None
+    privilege = user.privilege if user else 'view'
     bar_chart = plot_savings_progress()  # Main bar graph
     gauge_chart = plot_gauge_charts()    #gauge chart for 1st load
-    return render_template('savings.html', bar_chart=bar_chart,gauges=gauge_chart)
+    return render_template('savings.html', bar_chart=bar_chart,gauges=gauge_chart,privilege=privilege)
 
 @app.route('/get_savings_data', methods=['GET'])
 def get_savings_data():  # For Plotly.js graph
@@ -1365,22 +1366,31 @@ def get_filters_for_table():
 
 @app.route('/add_saving_target', methods=['POST'])
 def add_saving_target():
+    # Check if user is logged in
+    if 'user_id' not in session:
+        return jsonify({"error": "Unauthorized"}), 401
+    
+    # check if user has edit privilages 
+    user = User.query.get(session['user_id'])
+    if user.privilege != 'edit':
+        return jsonify({"error": "Insufficient permissions"}), 403
+
+    user_id = session['user_id']
     data = request.json
-    print("Received data for saving target:", data)
 
     # Find or create the saving category
     category = SavingCategory.query.filter_by(name=data['saving_category_name']).first()
     if not category:
         category = SavingCategory(
             name=data['saving_category_name'],
-            description=data.get('saving_category_description', '')  # Use default if description is not provided
+            description=data.get('saving_category_description', '')
         )
         db.session.add(category)
         db.session.commit()
 
-    # Create a new savings target
+    # Create a new savings target WITH USER_ID FROM SESSION
     target = SavingsTarget(
-        user_id=data.get('user_id', 1),  # Use user_id from request or default to 1
+        user_id=user_id,  # Use session user_id instead of request data
         category_id=category.id,
         name=data['savings_goal_name'],
         amount=data['savings_target_amount'],
@@ -1389,10 +1399,10 @@ def add_saving_target():
     db.session.add(target)
     db.session.commit()
 
-    # Optionally add an initial savings entry
+    # Optional initial savings entry (also uses session user_id)
     if data.get('initial_saving_amount', 0) > 0:
         savings = Savings(
-            user_id=data.get('user_id', 1),  # Use user_id from request or default to 1
+            user_id=user_id,  # Use session user_id
             target_id=target.id,
             amount=data['initial_saving_amount'],
             date=datetime.utcnow()
@@ -1400,7 +1410,8 @@ def add_saving_target():
         db.session.add(savings)
         db.session.commit()
 
-    return jsonify({"message": "Savings target and (optional) initial savings entry added successfully"}), 201
+    return jsonify({"message": "Savings target added successfully"}), 201
+
 
 @app.route('/update_saving_target/<int:id>', methods=['PUT'])
 def update_saving_target(id):
@@ -1544,7 +1555,7 @@ def get_all_data():
 
     user_id = session["user_id"]
     user = User.query.get(user_id)
-
+    # privilege = user.privilege
     if not user:
         return jsonify({"error": "User not found"}), 404
 
@@ -1570,11 +1581,10 @@ def get_all_data():
 
     targets = query.all()
     data = []
-
     for target in targets:
         savings = Savings.query.filter_by(target_id=target.id).first()
         category = SavingCategory.query.get(target.category_id)
-
+        
         data.append({
             "savings_target_id": target.id,
             "saving_category_name": category.name,
@@ -1585,9 +1595,11 @@ def get_all_data():
             "savings_amount_saved": float(savings.amount or 0) if savings else 0,
             "savings_payment_mode": savings.mode if savings else '',
             "savings_date_saved": str(savings.date) if savings else str(datetime.today().date()),
-            "savings_updated_date": str(savings.date) if savings else None
+            "savings_updated_date": str(savings.date) if savings else None,
+            # "userPrivilege":privilege,
         })
     return jsonify(data)
+
 with app.app_context():
     db.create_all()
 

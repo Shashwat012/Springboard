@@ -9,12 +9,12 @@
 </head>
 <body>
     <header>
-        <h1 class="small-header">FAMILY FINANCE TRACKER</h1>
+        <h1 class="small-header">UNIFIED FAMILY FINANCE TRACKER</h1>
         <nav>
-            <button id="expense-btn" class="hover-effect">Expense Management</button>
-            <button id="budget-btn" class="hover-effect">Budget & Savings Management</button>
-            <button id="insights-btn" class="hover-effect">Insights Dashboard</button>
-            <span id="user-greeting">Hello, User!</span>
+            <button id="expense-btn" class="hover-effect"><a class="Anchorbtn" href='/super_user_dashboard'>Superuser Dashboard</a></button>
+            <button id="budget-btn" class="hover-effect"><a class="Anchorbtn" href='/dashboard'>Expense & Budget Management</a></button>
+            <button id="insights-btn" class="hover-effect"><a class="Anchorbtn" href='/saving_page'>Savings Management</a></button>
+            <button id="insights-btn1" class="hover-effect"><a class="Anchorbtn" href='/logout'>LOGOUT</a></button>
             <button id="dark-mode-toggle" onclick="toggleDarkMode()">🌙</button>
         </nav>
     </header>
@@ -30,8 +30,10 @@
             <div class="table-header">
                 <h2>All Savings Targets</h2>
                 <div class="controls">
-                    <button onclick="showForm('savingTargetForm')">Add Saving Target</button>
-                    <button onclick="showForm('savingsForm')">Add Savings</button>
+                    <!-- jinja templates for privilages -->
+                    {% if privilege == 'edit' %}
+                        <button onclick="showForm('savingTargetForm')">Add Saving Target</button>
+                    {% endif %}
                     <button id="filterToggle" onclick="toggleFilter()">📅</button>
                 </div>
                 <!-- Month & Year Filter (Initially Hidden) -->
@@ -59,8 +61,10 @@
                         <th>Amount Saved</th>
                         <th>Remaining Amount</th>
                         <th>Payment Mode</th>
-                        <th>Edit/Delete</th>
-                        <th>Update Savings</th>
+                        {% if privilege == 'edit' %}
+                            <th>Edit/Delete</th>
+                            <th>Update Savings</th>
+                        {% endif %}
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -77,7 +81,7 @@
                 </button>
             </div>
         </div>
-       
+
         <div class="form-popup" id="savingTargetForm">
             <button class="close-btn" onclick="closeForm('savingTargetForm')">X</button>
             <h2>Add Saving Target</h2>
@@ -139,6 +143,8 @@
     </div>
     
     <script>
+        var userPrivilege = "{{ privilege }}";
+        console.log("User Privilege:", userPrivilege); //logging in console to see it
         document.addEventListener("DOMContentLoaded", function() {
             fetch('/get_savings_filters')
                 .then(response => response.json())
@@ -278,6 +284,11 @@
             </div>
         </div>
     </div>
+    
  <script src="{{ url_for('static', filename='savings.js') }}"></script>
+ <footer style="background-color: #001f3f; color: white; text-align: center; padding: 10px; width: 100%;">
+     © 2025 Unified Family Finance Tracker. All rights reserved.
+ </footer>
 </body>
+
 </html>

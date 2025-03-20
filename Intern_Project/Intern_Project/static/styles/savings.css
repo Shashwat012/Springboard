@@ -18,7 +18,7 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #38647a; /* Blue Grey 500 */
+    background: #45b0e6; /* Blue Grey 500 */
     color: #fff;
     padding: 25px;
     transition: background-color 0.3s ease-in-out; /* Smooth transition */
@@ -553,7 +553,19 @@ select:focus {
     cursor: pointer;
     border-radius: 3px;
 }
-
+.Anchorbtn{
+    text-decoration: none;
+    color: white;
+}
+#insights-btn1{
+    background-color: #f44336;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: 0.2s ease-in-out;
+}
 /* Responsive */
 @media (max-width: 768px) {
     .small-graphs {
